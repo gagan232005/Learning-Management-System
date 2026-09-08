@@ -1,0 +1,39 @@
+{
+  "name": "lms-reels-platform",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "npm run build --prefix backend && vite build",
+    "postinstall": "npm install --prefix backend",
+    "preview": "vite preview",
+    "start": "npm start --prefix backend",
+    "backend": "npm start --prefix backend",
+    "backend:dev": "npm run dev --prefix backend",
+    "backend:node": "npm start --prefix backend",
+    "backend:py": "python backend_py/run.py",
+    "seed:py": "python -m backend_py.seed.seeder"
+  },
+  "dependencies": {
+    "canvas-confetti": "^1.9.3",
+    "clsx": "^2.1.1",
+    "lucide-react": "^0.475.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "tsx": "^4.19.2"
+  },
+  "devDependencies": {
+    "@types/canvas-confetti": "^1.9.0",
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0",
+    "@vitejs/plugin-react": "^4.3.1",
+    "autoprefixer": "^10.4.19",
+    "postcss": "^8.4.38",
+    "tailwindcss": "^3.4.4",
+    "typescript": "^5.4.5",
+    "vite": "^6.0.0"
+  }
+}
+
+

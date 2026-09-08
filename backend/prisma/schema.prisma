@@ -1,0 +1,315 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  STUDENT
+  MENTOR
+  ADMIN
+}
+
+enum UserStatus {
+  ACTIVE
+  INACTIVE
+}
+
+enum CourseStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+enum CourseLevel {
+  BEGINNER
+  INTERMEDIATE
+  ADVANCED
+  ALL_LEVELS
+}
+
+enum QuestionType {
+  MCQ
+  TRUE_FALSE
+}
+
+model User {
+  id           String     @id @default(cuid())
+  email        String     @unique
+  passwordHash String
+  name         String
+  avatar       String?
+  role         Role       @default(STUDENT)
+  status       UserStatus @default(ACTIVE)
+  bio          String?    @db.Text
+  specialty    String?
+  xp           Int        @default(0)
+  level        Int        @default(1)
+  points       Int        @default(0)
+  streakDays   Int        @default(0)
+  lastActiveAt DateTime?
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+
+  taughtCourses  Course[]       @relation("CourseInstructor")
+  enrollments    Enrollment[]
+  lessonProgress LessonProgress[]
+  quizAttempts   QuizAttempt[]
+  certificates   Certificate[]
+  reviews        Review[]
+  badges         UserBadge[]
+  xpEvents       XpEvent[]
+  refreshTokens  RefreshToken[]
+
+  @@index([role])
+  @@index([status])
+  @@index([email])
+  @@map("users")
+}
+
+model RefreshToken {
+  id        String   @id @default(cuid())
+  token     String   @unique @db.VarChar(512)
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@map("refresh_tokens")
+}
+
+model Course {
+  id              String       @id @default(cuid())
+  title           String       @db.VarChar(255)
+  subtitle        String?      @db.VarChar(255)
+  description     String       @db.Text
+  category        String       @db.VarChar(100)
+  price           Float        @default(0)
+  discountedPrice Float?
+  thumbnailUrl    String?      @db.Text
+  level           CourseLevel  @default(ALL_LEVELS)
+  status          CourseStatus @default(DRAFT)
+  rating          Float        @default(0)
+  reviewsCount    Int          @default(0)
+  studentsCount   Int          @default(0)
+  durationHours   Float        @default(0)
+  instructorId    String
+  instructor      User         @relation("CourseInstructor", fields: [instructorId], references: [id], onDelete: Restrict)
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+
+  modules      Module[]
+  enrollments  Enrollment[]
+  quizzes      Quiz[]
+  certificates Certificate[]
+  reviews      Review[]
+
+  @@index([category])
+  @@index([level])
+  @@index([status])
+  @@index([instructorId])
+  @@index([title])
+  @@map("courses")
+}
+
+model Module {
+  id          String   @id @default(cuid())
+  courseId    String
+  course      Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  title       String   @db.VarChar(255)
+  description String?  @db.Text
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  lessons Lesson[]
+  quizzes Quiz[]
+
+  @@index([courseId])
+  @@index([courseId, order])
+  @@map("modules")
+}
+
+model Lesson {
+  id            String   @id @default(cuid())
+  moduleId      String
+  module        Module   @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+  title         String   @db.VarChar(255)
+  content       String?  @db.Text
+  videoUrl      String?  @db.Text
+  durationSec   Int      @default(0)
+  order         Int      @default(0)
+  isFreePreview Boolean  @default(false)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  progress LessonProgress[]
+
+  @@index([moduleId])
+  @@index([moduleId, order])
+  @@map("lessons")
+}
+
+model Enrollment {
+  id              String    @id @default(cuid())
+  userId          String
+  user            User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  courseId        String
+  course          Course    @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  progressPercent Float     @default(0)
+  lastLessonId    String?
+  completedAt     DateTime?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  @@unique([userId, courseId])
+  @@index([userId])
+  @@index([courseId])
+  @@map("enrollments")
+}
+
+model LessonProgress {
+  id          String    @id @default(cuid())
+  userId      String
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  lessonId    String
+  lesson      Lesson    @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+  completed   Boolean   @default(true)
+  completedAt DateTime  @default(now())
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@unique([userId, lessonId])
+  @@index([userId])
+  @@index([lessonId])
+  @@map("lesson_progress")
+}
+
+model Quiz {
+  id                String   @id @default(cuid())
+  courseId          String
+  course            Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  moduleId          String?
+  module            Module?  @relation(fields: [moduleId], references: [id], onDelete: SetNull)
+  title             String   @db.VarChar(255)
+  description       String?  @db.Text
+  passingPercentage Float    @default(60)
+  timeLimitSec      Int?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  questions Question[]
+  attempts  QuizAttempt[]
+
+  @@index([courseId])
+  @@index([moduleId])
+  @@map("quizzes")
+}
+
+model Question {
+  id           String       @id @default(cuid())
+  quizId       String
+  quiz         Quiz         @relation(fields: [quizId], references: [id], onDelete: Cascade)
+  text         String       @db.Text
+  type         QuestionType @default(MCQ)
+  options      Json
+  correctIndex Int
+  explanation  String?      @db.Text
+  order        Int          @default(0)
+  marks        Int          @default(1)
+
+  @@index([quizId])
+  @@map("questions")
+}
+
+model QuizAttempt {
+  id         String   @id @default(cuid())
+  quizId     String
+  quiz       Quiz     @relation(fields: [quizId], references: [id], onDelete: Cascade)
+  userId     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  score      Int
+  totalMarks Int
+  percentage Float
+  passed     Boolean
+  answers    Json
+  createdAt  DateTime @default(now())
+
+  @@index([quizId])
+  @@index([userId])
+  @@index([userId, quizId])
+  @@map("quiz_attempts")
+}
+
+model Certificate {
+  id                String   @id @default(cuid())
+  certificateNumber String   @unique
+  userId            String
+  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  courseId          String
+  course            Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  issuedAt          DateTime @default(now())
+  createdAt         DateTime @default(now())
+
+  @@index([userId])
+  @@index([courseId])
+  @@map("certificates")
+}
+
+model Review {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  courseId  String
+  course    Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  rating    Int
+  comment   String?  @db.Text
+  createdAt DateTime @default(now())
+
+  @@unique([userId, courseId])
+  @@index([courseId])
+  @@map("reviews")
+}
+
+// ---- Gamification (modular, additive) ----
+model Badge {
+  id          String   @id @default(cuid())
+  slug        String   @unique
+  title       String
+  description String
+  icon        String?
+  xpReward    Int      @default(0)
+  createdAt   DateTime @default(now())
+
+  users UserBadge[]
+
+  @@map("badges")
+}
+
+model UserBadge {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  badgeId   String
+  badge     Badge    @relation(fields: [badgeId], references: [id], onDelete: Cascade)
+  awardedAt DateTime @default(now())
+
+  @@unique([userId, badgeId])
+  @@map("user_badges")
+}
+
+model XpEvent {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  amount    Int
+  reason    String
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@map("xp_events")
+}
