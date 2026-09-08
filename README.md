@@ -1,4 +1,4 @@
-# 🎓 LearnHub – Learning Management System
+# 🎓 LearnScroll – Learning Management System
 
 Full-stack Learning Management System with **role-based access for students, mentors, and administrators**.
 
