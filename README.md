@@ -1,124 +1,418 @@
-# LMS Platform — Modernized (Node.js + MySQL)
+# 🎓 LearnHub – Learning Management System
 
-Production-style Learning Management System. React frontend (preserved) + **new Node.js + Express + TypeScript + Prisma + MySQL-only backend**. No MongoDB. No Python.
+Full-stack Learning Management System with **role-based access for students, mentors, and administrators**.
 
-Source analyzed: https://github.com/Siriwodiyer/LMS (`backend_py/` FastAPI+MySQL/SQLite, `backend/` Express+Mongo/file-JSON, `src/` React).
+LearnHub provides a structured learning platform where students can enroll in courses, complete lessons, attempt quizzes, track their learning progress, and earn certificates. Mentors can manage courses and learning content, while administrators manage users, courses, and platform resources.
 
-## Project structure
+Built as an **individual full-stack project** to explore backend development, REST APIs, authentication, role-based authorization, database management, testing, containerization, and CI workflows.
 
+## 🛠️ Technology
+
+![React](https://img.shields.io/badge/React-19-61DAFB?style=for-the-badge\&logo=react\&logoColor=black)
+![JavaScript](https://img.shields.io/badge/JavaScript-ES6-F7DF1E?style=for-the-badge\&logo=javascript\&logoColor=black)
+![Node.js](https://img.shields.io/badge/Node.js-Backend-339933?style=for-the-badge\&logo=node.js\&logoColor=white)
+![Express.js](https://img.shields.io/badge/Express.js-REST_API-000000?style=for-the-badge\&logo=express\&logoColor=white)
+![MySQL](https://img.shields.io/badge/MySQL-Database-4479A1?style=for-the-badge\&logo=mysql\&logoColor=white)
+![JWT](https://img.shields.io/badge/JWT-Authentication-000000?style=for-the-badge\&logo=jsonwebtokens\&logoColor=white)
+![Docker](https://img.shields.io/badge/Docker-Containerization-2496ED?style=for-the-badge\&logo=docker\&logoColor=white)
+![Docker Compose](https://img.shields.io/badge/Docker_Compose-Orchestration-2496ED?style=for-the-badge\&logo=docker\&logoColor=white)
+![Jest](https://img.shields.io/badge/Jest-Testing-C21325?style=for-the-badge\&logo=jest\&logoColor=white)
+![Supertest](https://img.shields.io/badge/Supertest-API_Testing-000000?style=for-the-badge)
+![ESLint](https://img.shields.io/badge/ESLint-Code_Quality-4B32C3?style=for-the-badge\&logo=eslint\&logoColor=white)
+![Prettier](https://img.shields.io/badge/Prettier-Code_Formatting-F7B93E?style=for-the-badge\&logo=prettier\&logoColor=black)
+![GitHub Actions](https://img.shields.io/badge/GitHub_Actions-CI-2088FF?style=for-the-badge\&logo=githubactions\&logoColor=white)
+
+## 📸 Screenshots
+
+### 🌐 Landing Page
+
+![img.png](img.png)<!-- Add screenshot here -->
+
+
+## ✨ Features
+
+* 🔐 JWT-based authentication
+* 👥 Role-based access control for **Student / Mentor / Admin**
+* 📝 User registration and login
+* 🔑 Secure password hashing
+* 📚 Course browsing and enrollment
+* 🎬 Structured lesson-based learning
+* 🔒 Lesson progression and content unlocking
+* 📝 Quiz and assessment system
+* 🏆 Certificate generation after course completion
+* 📊 Student learning progress tracking
+* 👨‍🏫 Mentor dashboard
+* 📚 Course and lesson management
+* 📝 Quiz management
+* 👤 User profile management
+* 🛠️ Admin dashboard
+* 👥 User and role management
+* 📈 Course and student progress monitoring
+* 🔗 RESTful API architecture
+* 🐬 MySQL database integration
+* 🐳 Dockerized backend
+* ⚙️ Docker Compose environment
+* 🧪 Automated API testing with Jest and Supertest
+* 🧹 ESLint for code quality
+* ✨ Prettier for consistent code formatting
+* 🔄 GitHub Actions CI workflow
+
+## 👥 User Roles
+
+### 🎓 Student
+
+Students can:
+
+* Register and log in
+* Browse available courses
+* Enroll in courses
+* Access course lessons
+* Follow structured learning paths
+* Complete lessons
+* Attempt quizzes
+* Track course progress
+* Earn certificates
+* Manage their profile
+
+### 👨‍🏫 Mentor
+
+Mentors can:
+
+* Log in through the mentor portal
+* Create and manage courses
+* Add and manage lessons
+* Create and manage quizzes
+* Organize learning content
+* Monitor student progress
+
+### 🛠️ Admin
+
+Administrators can:
+
+* Manage users
+* Manage student and mentor accounts
+* Manage roles and permissions
+* Manage courses
+* Monitor platform activity
+* Access administrative dashboards
+
+## 🔄 How It Works
+
+LearnHub combines **secure authentication, role-based authorization, structured learning paths, quizzes, certificates, and progress tracking** into a single learning platform.
+
+### 🔐 1. Register / Log In
+
+Users register and authenticate through the application. JWT-based authentication is used to securely identify users and protect restricted resources.
+
+⬇️
+
+### 📚 2. Browse & Enroll
+
+Students browse available courses and enroll in courses they want to learn.
+
+⬇️
+
+### 🎬 3. Learn
+
+Students progress through structured lessons and learning materials.
+
+⬇️
+
+### 🔓 4. Unlock
+
+Lessons and learning activities follow a structured progression, ensuring students complete the required content before moving forward.
+
+⬇️
+
+### 📝 5. Take Quizzes
+
+Students attempt quizzes associated with their learning content to evaluate their understanding.
+
+⬇️
+
+### 🏆 6. Earn Certificates
+
+After completing the required course activities, students can receive a course completion certificate.
+
+⬇️
+
+### 📊 7. Track Progress
+
+Students can monitor their learning progress through their dashboard.
+
+⬇️
+
+### 👨‍🏫 8. Manage
+
+Mentors manage courses, lessons, and quizzes, while administrators manage users, roles, and platform resources.
+
+### 🚀 Workflow
+
+**🔐 Register/Login → 📚 Enroll → 🎬 Learn → 🔓 Unlock → 📝 Quiz → 🏆 Certificate → 📊 Track Progress**
+
+## 🏗️ System Architecture
+
+```text
+┌──────────────────────────┐
+│      React Frontend      │
+│                          │
+│ Student / Mentor / Admin │
+└────────────┬─────────────┘
+             │
+             │ HTTP / REST API
+             ▼
+┌──────────────────────────┐
+│     Node.js + Express    │
+│                          │
+│ Authentication           │
+│ Authorization            │
+│ Business Logic           │
+│ REST API                 │
+└────────────┬─────────────┘
+             │
+             │ Database Connection
+             ▼
+┌──────────────────────────┐
+│          MySQL           │
+│                          │
+│ Users                    │
+│ Courses                  │
+│ Lessons                  │
+│ Quizzes                  │
+│ Enrollments              │
+│ Progress                 │
+│ Certificates             │
+└──────────────────────────┘
 ```
-.
-├── backend/                 # NEW production backend (MySQL only)
-│   ├── src/
-│   │   ├── config/ (env, database, swagger)
-│   │   ├── controllers/ (auth, user, course, enrollment, quiz)
-│   │   ├── middleware/ (auth, role, error, rateLimit, validate)
-│   │   ├── routes/ (auth, users, courses, lessons, quizzes, enrollments, certificates)
-│   │   ├── services/ (auth, user, course, enrollment/progress, quiz/certificate)
-│   │   ├── repositories/ (user, course)
-│   │   ├── validators/ (zod: auth, user, course, quiz)
-│   │   ├── utils/ (api, asyncHandler, password, tokens, gamification)
-│   │   ├── types/ (Role, AuthTokenPayload, express)
-│   │   ├── app.ts / server.ts
-│   ├── prisma/ (schema.prisma, seed.ts)
-│   ├── tests/ (auth, courses, enrollment, quiz — Jest + Supertest)
-│   ├── Dockerfile / package.json / tsconfig.json / .env.example / README.md
-├── frontend/                # Preserved LMS React app (migrated API client)
-│   └── src/services/api.ts  # → new MySQL backend contract + refresh tokens
-├── docker-compose.yml       # mysql:8.0 + backend (docker compose up)
-├── .github/workflows/ci.yml # backend build + prisma generate + tsc + jest
-```
 
-Note: the portfolio site previously at repo root (`src/`, `index.html`, `vite.config.ts`) is unrelated to the LMS and was left untouched; the migrated LMS frontend lives under `frontend/`.
+## 🛠️ Tech Stack
 
-## Architecture
+### 🎨 Frontend
 
-```
-React (frontend/src) —Axios/fetch→ Express routes → controllers → services → repositories → Prisma → MySQL 8
-                                     ↓ middleware: helmet/cors/rate-limit → auth(JWT) → role(RBAC) → zod-validate → error-handler
-Docs: /api/docs (Swagger). Tests: Jest + Supertest with mocked Prisma.
-```
+![React](https://img.shields.io/badge/React-19-61DAFB?style=for-the-badge\&logo=react\&logoColor=black)
+![JavaScript](https://img.shields.io/badge/JavaScript-ES6-F7DF1E?style=for-the-badge\&logo=javascript\&logoColor=black)
 
-## Database ER (MySQL via Prisma)
+* React
+* React Router
+* JavaScript
+* Responsive UI
+* Component-based architecture
 
-```
-users(1)───*(courses as instructor)   users(1)───*(enrollments)───*(courses)
-users(1)───*(lesson_progress)───*(lessons)───*(modules)───*(courses)
-courses(1)───*(modules)───*(lessons); courses(1)───*(quizzes)───*(questions)
-quizzes(1)───*(quiz_attempts)───*(users); users(1)───*(certificates)───*(courses)
-users(1)───*(reviews)───*(courses); users*───*(user_badges)───*(badges); users(1)───*(xp_events); users(1)───*(refresh_tokens)
-```
+### ⚙️ Backend
 
-Keys: PK cuid, UNIQUE(email, certificateNumber, [userId,courseId] enrollment, [userId,lessonId] progress, [userId,courseId] review, [userId,badgeId]), INDEX(role,status,category,level,courseId,moduleId), FK cascade except course.instructor RESTRICT.
+![Node.js](https://img.shields.io/badge/Node.js-339933?style=for-the-badge\&logo=node.js\&logoColor=white)
+![Express.js](https://img.shields.io/badge/Express.js-000000?style=for-the-badge\&logo=express\&logoColor=white)
 
-## Complete API list (base /api)
+* Node.js
+* Express.js
+* RESTful APIs
+* Authentication and authorization
+* Role-based access control
+* Middleware-based request handling
 
-- Health: `GET /health`
-- Auth: `POST /auth/register|/login|/refresh|/logout`, `GET /auth/me`
-- Users (ADMIN): `GET /users`, `GET /users/analytics`, `GET /users/:id`, `PATCH /users/me`, `PATCH /users/:id`, `DELETE /users/:id`
-- Courses: `GET /courses?page&limit&search&category&level&status&sortBy&sortOrder`, `GET /courses/:id`, `POST /courses` (MENTOR), `PUT /courses/:id`, `DELETE /courses/:id`
-- Modules/Lessons: `GET /courses/:courseId/modules`, `POST /courses/:courseId/modules` (MENTOR), `GET /modules/:moduleId/lessons`, `POST /modules/:moduleId/lessons` (MENTOR)
-- Enrollment: `POST /courses/:courseId/enroll`, `GET /enrollments/my-courses`
-- Progress: `POST /lessons/:lessonId/complete`, `GET /courses/:courseId/progress`
-- Quizzes: `GET /quizzes?courseId`, `GET /quizzes/:id` (answers hidden for students), `POST /quizzes` (MENTOR), `DELETE /quizzes/:id`, `POST /quizzes/:id/submit`, `GET /quizzes/:id/attempts`
-- Reviews: `POST /courses/:courseId/reviews`
-- Certificates: `GET /users/me/certificates`, `GET /certificates/:id`, `GET /certificates/verify/:certificateNumber`
-- Docs: `/api/docs`
+### 🗄️ Database & Security
 
-## Migration summary (Python → Node)
+![MySQL](https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge\&logo=mysql\&logoColor=white)
+![JWT](https://img.shields.io/badge/JWT-Authentication-000000?style=for-the-badge\&logo=jsonwebtokens\&logoColor=white)
 
-| Python (FastAPI `backend_py/routers/*`) | New Node endpoint | Notes |
-|---|---|---|
-| `POST /auth/register|/login`, `GET /auth/me`, `POST /auth/token/refresh` | same paths (`/refresh`, + `/logout`) | bcrypt kept; 24h token → 15m access + 7d refresh rotation; lax RBAC → enforced |
-| `GET /users?...`, `GET|PUT|DELETE /users/{id}` | `GET /users`, `GET /users/:id`, `PATCH /users/me|/:id`, `DELETE /users/:id` | roles normalized to STUDENT/MENTOR/ADMIN |
-| `GET|POST|PUT|DELETE /courses...`, `POST .../enroll`, `GET .../students`, `GET .../progress/{user}` | courses/modules/lessons/enrollment/progress above | JSON blob modules → normalized modules/lessons tables; progress server-computed |
-| `GET|POST|DELETE /quizzes...`, `POST .../submit` | same shapes | correct answers never sent pre-submit; scoring backend-only |
-| enrolled_students/progress JSON | enrollments + lesson_progress + certificates | duplicate enrollment via DB unique; cert auto-issued at 100% |
-| feedback/comments/notifications/rewards-vouchers/approvals/mentors/AI/reels/assignments/assessments | de-scoped (social layer) | frontend stubs throw descriptive errors; core reviews/certificates/XP/badges retained |
-| SQLAlchemy `users/courses/reels/quizzes/...` string-PK JSON blobs | Prisma normalized MySQL schema | proper FK/unique/index/cascade, `createdAt/updatedAt` |
+* MySQL
+* JWT authentication
+* Password hashing
+* Protected API routes
+* Role-based authorization
 
-Business logic moved: routers → controllers; ad-hoc queries → services (`auth/course/enrollment+progress/quiz+certificate/user`) → repositories → Prisma. Auth: `middleware/auth.py` → `auth.middleware.ts` + `tokens.ts`.
+### 🐳 DevOps & Development
 
-## Tech used
+![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge\&logo=docker\&logoColor=white)
+![Docker Compose](https://img.shields.io/badge/Docker_Compose-2496ED?style=for-the-badge\&logo=docker\&logoColor=white)
+![GitHub Actions](https://img.shields.io/badge/GitHub_Actions-2088FF?style=for-the-badge\&logo=githubactions\&logoColor=white)
 
-Frontend: React, fetch client, VITE_API_URL. Backend: Node 20, Express 4, TypeScript strict, Prisma 5, MySQL 8, JWT, bcryptjs, Zod, Helmet, CORS, express-rate-limit, Morgan, swagger-ui-express. Tests: Jest + ts-jest + Supertest. DevOps: Docker, Compose, GH Actions, ESLint/Prettier.
+* Docker
+* Docker Compose
+* Environment variables
+* GitHub Actions CI
 
-## Run locally
+### 🧪 Testing & Code Quality
+
+![Jest](https://img.shields.io/badge/Jest-C21325?style=for-the-badge\&logo=jest\&logoColor=white)
+![Supertest](https://img.shields.io/badge/Supertest-API_Testing-000000?style=for-the-badge)
+![ESLint](https://img.shields.io/badge/ESLint-4B32C3?style=for-the-badge\&logo=eslint\&logoColor=white)
+![Prettier](https://img.shields.io/badge/Prettier-F7B93E?style=for-the-badge\&logo=prettier\&logoColor=black)
+
+* Jest
+* Supertest
+* ESLint
+* Prettier
+
+## 🚀 Run Locally
+
+### 🧰 Prerequisites
+
+* 🟢 **Node.js 18+**
+* 📦 **npm**
+* 🐬 **MySQL**
+* 🐳 **Docker**
+* 🐳 **Docker Compose**
+* 🔧 **Git**
+
+## 1️⃣ 📥 Clone the Repository
 
 ```bash
-# 1) MySQL (Docker) — or any MySQL 8
-docker run -e MYSQL_ROOT_PASSWORD=password -e MYSQL_DATABASE=lms_db -p 3306:3306 mysql:8.0
-# 2) Backend
-cd backend && cp .env.example .env && npm install
-npx prisma migrate dev && npm run prisma:seed && npm run dev
-# 3) Frontend (migrated LMS app)
-# from repo root: frontend/src is the LMS React app; wire it to your Vite host and set VITE_API_URL=http://localhost:5000/api
+git clone https://github.com/gagan232005/Learning-Management-System.git
+cd Learning-Management-System
 ```
 
-## Run with Docker
+## 2️⃣ ⚙️ Environment Variables
+
+Create the required `.env` files based on the environment configuration used by the project.
+
+Example:
+
+```env
+DATABASE_URL=your_database_url
+JWT_SECRET=your_secure_jwt_secret
+PORT=5000
+```
+
+> 🔒 Never commit `.env` files or expose database credentials and JWT secrets in the repository.
+
+## 3️⃣ 🐳 Run Backend with Docker
+
+Build and start the backend using Docker Compose:
 
 ```bash
 docker compose up --build
-# backend → http://localhost:5000/api/health, docs → /api/docs
 ```
 
-## Env vars (backend/.env.example)
+To run the containers in the background:
 
-`PORT NODE_ENV CLIENT_URL DATABASE_URL JWT_SECRET JWT_REFRESH_SECRET JWT_ACCESS_EXPIRES_IN JWT_REFRESH_EXPIRES_IN BCRYPT_SALT_ROUNDS`
+```bash
+docker compose up -d --build
+```
 
-## Test results
+To stop the containers:
 
-`cd backend && npm test` — **4 suites / 14 tests pass** (mocked Prisma, no DB needed):
-auth (register 201/duplicate 409/validation 400/me 401), courses (list 200, student create 403, mentor create 201, anon 401), enrollment (enroll 201/duplicate 409, progress 25% server-computed), quiz (answers hidden, submit 1/2=50% fail, cert verify 404/200).
+```bash
+docker compose down
+```
 
-## Python components removed
+The backend API will be available at:
 
-None in this workspace (no `backend_py/` was ever copied over) — final tree has **zero Python**: no `*.py`, no `requirements.txt`, no `run.py`. The legacy `backend/` (Mongo/file-JSON) from the source repo was not carried over either; it is fully replaced by `backend/` (Prisma+MySQL). Frontend legacy social calls are stubbed, not Python.
+```text
+http://localhost:5000
+```
 
-## Resume bullets
+## 4️⃣ 🎨 Run Frontend
 
-- Re-engineered LMS backend from FastAPI/Mongo-prototype to production Node.js + Express + TypeScript + Prisma + MySQL with layered architecture and strict TS
-- Designed normalized MySQL schema (13 tables) with Prisma migrations: FK cascades, composite uniques preventing duplicate enrollment/progress, search indexes
-- Implemented JWT access/refresh rotation, bcrypt, RBAC (STUDENT/MENTOR/ADMIN), rate limiting, Helmet/CORS, Zod validation, centralized error envelope, Swagger docs
-- Built server-authoritative progress/quiz/certificate engine (backend-computed %, hidden answers, auto-issue verify flow) plus modular XP/level/badge gamification
-- Shipped paginated/search/filter/sort course APIs, Docker Compose (MySQL+API), GH Actions CI, Jest+Supertest suite (14 tests incl. negative RBAC cases)
+Navigate to the frontend directory:
+
+```bash
+cd frontend
+```
+
+Install dependencies:
+
+```bash
+npm install
+```
+
+Start the development server:
+
+```bash
+npm run dev
+```
+
+The frontend will be available at:
+
+```text
+http://localhost:5173
+```
+
+> 💡 **Note:** The backend and frontend can be run in separate environments. Make sure the backend API is running before using features that require server communication.
+
+## 🧪 Testing
+
+Run the automated test suite with:
+
+```bash
+npm test
+```
+
+API endpoints can be tested using Jest and Supertest.
+
+Tests can cover important backend functionality such as:
+
+* Authentication
+* Authorization
+* User management
+* Course APIs
+* Lesson APIs
+* Quiz APIs
+* Protected routes
+
+## 🧹 Code Quality
+
+Run ESLint to identify code-quality issues:
+
+```bash
+npm run lint
+```
+
+Format the code using Prettier:
+
+```bash
+npm run format
+```
+
+These tools help maintain consistent, readable, and maintainable code across the project.
+
+## 🔄 Continuous Integration
+
+LearnHub uses **GitHub Actions** to automate the development workflow.
+
+The CI pipeline can be used to:
+
+* Install dependencies
+* Run linting
+* Run automated tests
+* Validate backend changes
+* Ensure code changes meet project checks
+
+This helps identify issues early and maintain code quality throughout development.
+
+## 🔒 Security
+
+The application follows several security practices:
+
+* 🔐 JWT-based authentication
+* 🔑 Password hashing
+* 👥 Role-based authorization
+* 🛡️ Protected backend routes
+* 🌐 Environment-based configuration
+* 🚫 Sensitive credentials excluded from source control
+
+## 🗺️ Roadmap
+
+* 📊 **Advanced Learning Analytics** — Provide deeper insights into student performance and course completion.
+* 🔔 **Notifications** — Add notifications for new courses, quizzes, certificates, and learning milestones.
+* 📧 **Email Integration** — Implement email verification and password-reset functionality.
+* 🎯 **Personalized Learning** — Recommend courses based on student interests and learning history.
+* 💬 **Discussion System** — Allow students and mentors to communicate through course discussions.
+* 📱 **Mobile Optimization** — Improve the learning experience across mobile and tablet devices.
+* ☁️ **Production Deployment** — Deploy the complete application using a production-ready cloud architecture.
+
+> 🚀 **LearnHub is continuously evolving into a scalable learning platform focused on structured education, student engagement, and practical full-stack development.**
+
+## 👨‍💻 Author
+
+Built and maintained with ❤️ by **Gagan V**
+
+🎓 Computer Science Engineering Student
+
+🔗 **LinkedIn:** [Gagan V](https://www.linkedin.com/in/gagan232005/)
+
+🔗 **GitHub:** [Gagan](https://github.com/gagan232005/)
+
+---
+
+> 💡 **LearnHub is an individual project built to explore full-stack development, REST API design, role-based access control, authentication, database management, testing, containerization, and CI/CD practices while building a practical Learning Management System.**
