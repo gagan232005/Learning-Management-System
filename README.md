@@ -25,8 +25,8 @@ Built as an **individual full-stack project** to explore backend development, RE
 ## 📸 Screenshots
 
 ### 🌐 Landing Page
+<img width="1897" height="906" alt="Screenshot 2026-09-08 231805" src="https://github.com/user-attachments/assets/172b0137-6aef-4968-bd98-ea7303124eb1" />
 
-![img.png](img.png)<!-- Add screenshot here -->
 
 
 ## ✨ Features
